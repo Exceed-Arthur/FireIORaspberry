@@ -147,11 +147,37 @@ def monitorSensors():
     access_point_exc.disconnectAccessPoint()  # Ensure the local server is not on, so we can make real Wi-Fi requests
     rfReceiver.activate()
     WebFunctions.RefreshDeviceUserActivity()  # Determine if user is active, and send non-priority requests if so
+    onboardTemperature = TempHumidityS.getTemperature()
+    onboardHumidity = TempHumidityS.getHumidity()
     while MONITORING:
         for i in range(SENSOR_READ_LIMIT):
             RF_CODES = rfReceiver.normalizeRFCodes(rfReceiver.scanRFCodes())  # Returns set of normalized binary codes
             writeDeviceFileFromRF(RF_CODES)  # Cache and update device file containing user's home devices
+            PriorityNetworkRequestData = set()  # Save Network Capacity By Limiting Immediate Requests
+            if FlammableGasS.basicSensorRead():
+                PriorityNetworkRequestData.add({"priority": HIGH, "device": FlammableGasS.DEVICE_COMPOSITE_KEY(),
+                                                "flammableGas": PRESENT, "intensity": FlammableGasS.get8BitIntensity()})
+                FlammableGasS.HIGH_SIGNALS += 1
+            if ProximityS.basicSensorRead():
+                ProximityS.HIGH_SIGNALS += 1
+            currentTemp = TempHumidityS.getTemperature()
+            currentHumidity = TempHumidityS.getHumidity()
+            TempHumidityS.temperatureFluctuation += (onboardTemperature - currentTemp)
+            TempHumidityS.humidityFluctuation += (onboardHumidity - currentHumidity)
+            onboardTemperature, onboardHumidity = currentTemp, currentHumidity
+            TempHumidityS.READ_COUNT += 1
+            if DEVICE_USER.isActive:  # Only send Onboard Temp and Humidity if User is Active
+                PriorityNetworkRequestData.add({"priority": HIGH, "device": TempHumidityS.DEVICE_COMPOSITE_KEY(),
+                                                "state": TempHumidityS.getTemperatureChange(),
+                                                "humidity": (TempHumidityS.getHumidity()),
+                                                "temperature": int(onboardTemperature)})
+            if PriorityNetworkRequestData:
+                WebFunctions.sendPriorityAlert(url=EXC_DEVICE_LISTENER__URL, json=PriorityNetworkRequestData)
         NetworkRequestData = set()
+        NetworkRequestData.add({"device": TempHumidityS.DEVICE_COMPOSITE_KEY(),
+                                "state": TempHumidityS.getTemperatureChange(),
+                                "humidity": (TempHumidityS.getHumidity()),
+                                "temperature": int(onboardTemperature)})
         WebFunctions.RefreshDeviceUserActivity()  # Determine if user is active, and send non-priority requests if so
         for device in collectOffBoardSensors():  # Extract Devices and their data from RF Codes (translated):
             NetworkRequestData.add(device)
