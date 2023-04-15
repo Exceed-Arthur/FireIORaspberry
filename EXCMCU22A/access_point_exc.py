@@ -5,15 +5,15 @@ exc_ssid = 'ExceedIO HomeSense WIFI'
 exc_wpa = 'safe'
 
 
-def connectAccessPoint(ssid=exc_ssid, password=exc_wpa):  # VOID
+def connectAccessPoint(ssid1=exc_ssid, password1=exc_wpa):  # VOID
 	global ap_if
-	ap_if.config(ssid, password)
+	ap_if.config(ssid=ssid1, password=password1)
 	ap_if.active(True)
 	if ap_if.active():
-		print(f"ACCESS POINT {ssid} ACTIVATED [connect with pw: {password}]")
+		print(f"ACCESS POINT {ssid1} ACTIVATED [connect with pw: {password1}]")
 		return True
 	else:
-		print(f"ACCESS POINT {ssid} FAILED TO ACTIVATE")
+		print(f"ACCESS POINT {ssid1} FAILED TO ACTIVATE")
 		return False
 
 

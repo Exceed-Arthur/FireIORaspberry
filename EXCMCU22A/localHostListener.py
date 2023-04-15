@@ -1,5 +1,5 @@
 import fileIO
-import main
+
 from WebFunctions import *
 from template_content import *
 import config

@@ -165,29 +165,31 @@ def monitorSensors():
             NetworkRequestData.add(device)
         if DEVICE_USER.isActive:
             WebFunctions.UpdateDashboard(NetworkRequestData)  # Send post request to reflect user profile and device states
-        if not NetworkStation.isConnected():
-            LightControl.blink(LED.DISCONNECT, 2)
-            LightControl.light(LED_PIN=LED.DISCONNECT)
+        if not NetworkStation.isconnected():
+            LightControl.blink(DISCONNECT, 2)
+            LightControl.light(LED_PIN=DISCONNECT)
             MONITORING = NetworkStation.connect_WIFI()
 
 import LightControl
 from PIN_DEFS import LED_PINS
-from User_Profile import DEVICE_USER
+from UserProfile import DEVICE_USER
 import NetworkStation
 import WebFunctions
+import access_point_exc
 
 
 def servicePicker():
     print("STARTED SERVICE PICKER")
-    LightControl.lightShow([LED_PINS.RESET, LED_PINS.TALK], 6)
-    if not NetworkStation.isConnected(): # Check if connected
+    LightControl.lightShow([RESET, TALK], 6)
+    if not NetworkStation.STATION_INTERFACE.isconnected(): # Check if connected
         NetworkStation.connect_WIFI() # Connect to WIFI
         localServer()  # Ready local network socket to enable set-up web-app
     else:  # Good WIFI Connection
         local_ip = WebFunctions.getOwnIP()  # Get basic IP address of new WIFI connection (home network)
         if local_ip not in DEVICE_USER.ip_addresses:  # Link multiple IP addresses for this user
             DEVICE_USER.ip_addresses.append(local_ip) 
-        monitorSensors()
+        if not access_point_exc.ap_if.active():
+            monitorSensors()
 
 
 servicePicker()

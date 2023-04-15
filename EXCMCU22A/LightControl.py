@@ -14,13 +14,13 @@ def lightShow(LEDS, REPETITIONS=2):
 
 def dim(LEDS=LED_PINS):
     for LIGHT in LEDS:
-        machine.pin(LIGHT, machine.pin.OUT).off()
+        machine.pin(LIGHT, machine.Pin.OUT).off()
 
 
 def blink(LED_NAME, REPETITIONS):
     # NEED TO DELEGATE BLINKABILITY SO AS NOT TO USE RESOURCES TOO MUCH
     while REPETITIONS:
-        led = Pin(LED_NAME, machine.pin.OUT)
+        led = machine.Pin(LED_NAME, machine.Pin.OUT)
         led.on()
         time.sleep(0.5)
         led.off()
