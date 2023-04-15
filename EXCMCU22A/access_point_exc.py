@@ -10,10 +10,10 @@ def connectAccessPoint(ssid=exc_ssid, password=exc_wpa):  # VOID
 	ap_if.config(ssid, password)
 	ap_if.active(True)
 	if ap_if.active():
-		#print(f"ACCESS POINT {ssid} ACTIVATED [connect with pw: {password}]")
+		print(f"ACCESS POINT {ssid} ACTIVATED [connect with pw: {password}]")
 		return True
 	else:
-		#print(f"ACCESS POINT {ssid} FAILED TO ACTIVATE")
+		print(f"ACCESS POINT {ssid} FAILED TO ACTIVATE")
 		return False
 
 
@@ -21,7 +21,7 @@ def disconnectAccessPoint(ssid=exc_ssid):
 	global ap_if
 	ap_if.active(False)
 	if ap_if.active():
-		#print(f"ACCESS POINT {ssid} DISCONNECTED")
+		print(f"ACCESS POINT {ssid} DISCONNECTED")
 		return True
 	else:
 		return False
@@ -31,7 +31,7 @@ def modifyCredentials(SSID_, PASS_):
 	import fileIO
 	for credential in [SSID_, PASS_]:
 		fileIO.replaceFileFromString(credentialFile, fileIO.replaceVariableInPYFileString(credential))
-	#print(f"Modified {credentialFile} with new SSID and PASS {[SSID_, PASS_]}")
+	print(f"Modified {credentialFile} with new SSID and PASS {[SSID_, PASS_]}")
 
 
 """

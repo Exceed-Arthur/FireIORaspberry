@@ -50,4 +50,3 @@ def hashBrick(var: str):
             return st
 
 
-print(hashBrick("Stfujb88#"))

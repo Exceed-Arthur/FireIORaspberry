@@ -1,3 +1,4 @@
+import os
 import WebFunctions
 import localHostListener
 from DEFINITIONS import *
@@ -6,10 +7,12 @@ from CONSTANT_DEFS import *
 import NetworkStation
 import access_point_exc
 import LightControl
+import device_identity
 import time
 from VOLATILE_DEVICE_FILE import *
 DEVICE_USER = EXC_PROFILE_USER()
-READING_RF = False  # Toggle this when you start various sensor monitoring procedures
+
+device_id = device_identity.randomID()  # 8 bit ID, UNIQUE PER PROGRAM
 
 
 def localServer():
@@ -21,9 +24,13 @@ def localServer():
 def writeCodesToFile(filename=LONG_TERM_DEVICE_FILE, codes=None):  # Data segment in part 2,  prefix in part 1 (index 0)
     OF_STR = ""
     try:
-        if os.size(LONG_TERM_DEVICE_FILE) > 1000000:
+        if os.path.getsize(LONG_TERM_DEVICE_FILE) > 1000000:
             try:
                 os.remove(LONG_TERM_DEVICE_FILE)
+            except:
+                print(f"Unable to remove {LONG_TERM_DEVICE_FILE}")
+    except:
+        print(f"Unable to check file size of {LONG_TERM_DEVICE_FILE}")
     for code in codes:
         OF_STR += f"{code[0:14]} {code[14:24]} {time.time()} \n"
     with open(filename, 'a') as OF:
@@ -87,8 +94,8 @@ def ConvertedGasSensorData(RawGasData: str, Sensor_Type) -> dict:  # Convert 10 
         print(f"Invalid binary representation: {RawGasData} // Raw Gas Data")
         return False
     intensity = int(RawGasData[0:8], 2)
-    print(f"Relative intensity of Gas Sensor: {intensity/255*100}") # Get Percentage because 255 is max intensity
-    RISING = RawFlameGuardData[8: 10]
+    print(f"Relative intensity of Gas Sensor: {intensity/255*100}")  # Get Percentage because 255 is max intensity
+    RISING = RawGasData[8: 10]
     if not RISING:
         flame = OFF
     else:
@@ -122,6 +129,7 @@ def writeDeviceFileFromRF(RFCodes):  # Use RF Signals from satellite devices to 
     writeCodesToFile(codes=RFCodes)  # Save the time-stamp of all devices to file
     print(f"Wrote device codes to file {RFCodes}")
 
+
 def collectOffBoardSensors():  # Use device file to build variable of device file
     import VOLATILE_DEVICE_FILE
     Devices = list(extractDevicesFromFile(VOLATILE_DEVICE_FILE.DEVICE_FILE))  # Dictionaries of Device data
@@ -137,7 +145,7 @@ def collectOffBoardSensors():  # Use device file to build variable of device fil
         elif device_type == FLAME_GUARD_SERIAL_TYPE:
             device.update(ConvertedFlameSensorData(data))
         elif device_type in gas_type_serial_prefixes:
-            device.update(ConvertedGasSensorData(data, type_serial))
+            device.update(ConvertedGasSensorData(data, device_type))
         JSON_Devices.add(device)
     return JSON_Devices
 

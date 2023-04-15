@@ -1,5 +1,5 @@
-from FireIORaspb import *
-
+import config
+from CONSTANT_DEFS import *
 
 def getDashboardLocation():
     return f"{DASHBOARD_LOCATION_PATH}?username={config.username}"
@@ -24,7 +24,7 @@ BASE_TEMPLATE = '''<!doctype html>
                 <a href="/logout">Logout</a>
               </li>
               <li>
-                <a href="{DASHBOARD_LOCATION_WITH_QUERY}">Dashboard</a>
+                <a href="{dashboardLocation}">Dashboard</a>
               </li>
               <li>
                 <a href="#">Help</a>
@@ -120,7 +120,7 @@ SUCCESSFUL_LOGIN = f'''
 '''
 
 
-LOGGED_OUT = '''
+LOGGED_OUT = f'''
   
   <div style="padding-top: 5rem">
     <p style="text-align: center;">You are not logged in. New users must create an account at <a href="https://homi.itoven-ai.co" style="color: gold; font-weight: bold;">Homi</a> with a valid internet connection. Your username must be a valid email address. </p>
@@ -147,7 +147,7 @@ LOGGED_OUT = '''
   
   '''
 
-NETWORK_CONFIG_PG = ''' 
+NETWORK_CONFIG_PG = f''' 
 
   <div>
     <p style="padding-bottom: 2rem; padding-top: 2rem; text-align: center;">Let's get connected to your home network.</p>

@@ -7,7 +7,7 @@ def buildQuery(dicted: dict):
 	query = ""
 	for key in list(dicted.keys()):
 		query += f"{key}={dicted[key]}&"
-	#print(f"Query from buildQuery: {query}")
+	print(f"Query from buildQuery: {query}")
 	return query
 
 

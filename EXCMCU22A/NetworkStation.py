@@ -1,8 +1,8 @@
 import config
 import network
 from LightControl import *
-from FireIORaspb import *
-from FireIORaspb import ValidateCredentials
+from EXCMCU22A import *
+from EXCMCU22A import ValidateCredentials
 STATION_INTERFACE = network.WLAN(network.STA_IF)
 
 

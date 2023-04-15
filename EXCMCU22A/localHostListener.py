@@ -2,6 +2,7 @@ import fileIO
 import main
 from WebFunctions import *
 from template_content import *
+import config
 from microdot import Microdot, Response, redirect
 from microdot_session import set_session_secret_key
 RELATIVE_BACK_END_SUCCESS_PATH = '/config/network/success2'
@@ -36,9 +37,9 @@ def login(req):
         return dict(completed=True, username=username, password=DEVICE_USER.password)
 
     if config.username is None:
-        return BASE_TEMPLATE.format(content=LOGGED_OUT)  # NO HARDCODED USERNAME, START OVER
+        return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,content=LOGGED_OUT)  # NO HARDCODED USERNAME, START OVER
     elif config.password is None:
-        return BASE_TEMPLATE.format(content=LOGGED_OUT)  # NO HARDCODES PASSWORD, START OVER
+        return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,content=LOGGED_OUT)  # NO HARDCODES PASSWORD, START OVER
     else:
         return redirect('/config/network/')  # Try to get real outgoing WIFI from home network, obtain cred
 
@@ -48,7 +49,7 @@ def login(req):
 def configNetwork(req):
     ssid_, wpa_ = None, None
     if NetworkStation.isConnected():
-        return BASE_TEMPLATE.format(content=SUCCESSFUL_WIFI_SETUP.format(
+        return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,content=SUCCESSFUL_WIFI_SETUP.format(
             username=DEVICE_USER.username))
     if config.WIFI_SSID and config.WIFI_PASSWORD:
         ssid_ = config.WIFI_SSID
@@ -65,7 +66,7 @@ def configNetwork(req):
         if not NetworkStation.isConnected():
             print("STATION NOT CONNECTED YET...INSERTING NEW CREDENTIALS")
             access_point_exc.modifyCredentials(ssid_, wpa_)
-            return redirect('/config/network') # Run again with credentials this time
+            return redirect('/config/network')  # Run again with credentials this time
         else:
             print("REDIRECTING TO SERVER HOSTED DASHBOARD FOR EXC SENSORS...")
             LightControl.lightShow([LED.CONNECT], 10)
@@ -75,19 +76,19 @@ def configNetwork(req):
             return redirect('/success')
     if req.method == 'GET':
         if not NetworkStation.isConnected():
-          #  print("STATION NOT CONNECTED YET...INSERTING NEW CREDENTIALS")
+            print("STATION NOT CONNECTED YET...INSERTING NEW CREDENTIALS")
             access_point_exc.modifyCredentials(req.args.get('ssid'), req.args.get('wpa'))
             return redirect('/config/network')
         else:
-           # print("REDIRECTING TO SERVER HOSTED DASHBOARD FOR EXC SENSORS...")
+            print("REDIRECTING TO SERVER HOSTED DASHBOARD FOR EXC SENSORS...")
             LightControl.lightShow([LED.CONNECT], 10)
             LightControl.light(LED_PIN=LED_PINS.CONNECT)
             return redirect(RELATIVE_FRONT_END_SUCCESS_PATH)
 
     if ssid_ is None:
-        return BASE_TEMPLATE.format(content=withAlert(NETWORK_CONFIG_PG, alertText="Please enter your network name in the box."))
+        return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,content=withAlert(NETWORK_CONFIG_PG, alertText="Please enter your network name in the box."))
     elif wpa_ is None:
-        return BASE_TEMPLATE.format(
+        return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,
             content=withAlert(NETWORK_CONFIG_PG, alertText="Please enter your network passkey in the box."))
     else:
         if NetworkStation.isConnected():
@@ -109,7 +110,7 @@ def logout():
 @app.post('/config/network/success1')
 def success_frontEnd():
     print("Serving front end success page for wifi setup.")
-    return BASE_TEMPLATE.format(content=withRedirect(SUCCESSFUL_WIFI_SETUP, RELATIVE_BACK_END_SUCCESS_PATH))
+    return BASE_TEMPLATE.format(dashboardLocation=DASHBOARD_LOCATION_PATH,content=withRedirect(SUCCESSFUL_WIFI_SETUP, RELATIVE_BACK_END_SUCCESS_PATH))
 
 
 @app.get('/config/network/success2')

@@ -1,11 +1,11 @@
-EXC_SESSION_INDEX_URL = "https://homi.exceed-io.com/ActiveSessionIndex"
-EXC_DEVICE_LISTENER_URL = "https://homi.exceed-io.com/DeviceRequestListener"
-USER_AUTHENTICATION_URL = "https://homi.exceed-io.com/token/auth/homi"
-EXC_SESSION_MODIFICATION_URL = "https://homi.exceed-io.com/ModifySessionIndex"
-DASHBOARD_LOCATION_PATH = "https://homi.exceed-io.com/Dashboard"
-DEVICE_REQUEST_LISTENER_URL = "https://homi.exceed-io.com/DeviceRequestListener"
+EXC_SESSION_INDEX_URL = "https://homi.herokuapp.com/ActiveSessionIndex"
+EXC_DEVICE_LISTENER_URL = "https://homi.herokuapp.com/DeviceRequestListener"
+USER_AUTHENTICATION_URL = "https://homi.herokuapp.com/token/auth/homi"
+EXC_SESSION_MODIFICATION_URL = "https://homi.herokuapp.com/ModifySessionIndex"
+DASHBOARD_LOCATION_PATH = "https://homi.herokuapp.com/Dashboard"
+DEVICE_REQUEST_LISTENER_URL = "https://homi.herokuapp.com/DeviceRequestListener"
 HomeSenseModelNameDict = {"000000": "Homi Hub", "000001": "HomeSense Hub + Kitchen Monitor", "100000": "CandleGuard",
-                          "110000": "FridgeSense", "110011": "GasWizard: Hydrogen", "110010": "GasWizard: Carbon Monoxide", "110001": "GasWizard: Methane","110101": "GasWizard: Smoke"}
+                          "110000": "FridgeSense", "110011": "GasWizard: Hydrogen", "110010": "GasWizard: Carbon Monoxide", "110001": "GasWizard: Methane", "110101": "GasWizard: Smoke"}
 FLAME_GUARD_SERIAL_PREFIX = "EXCFRSADAT2"
 FRIDGE_SENSE_SERIAL_TYPE = "110000"
 GASWIZARD_SMOKE_SERIAL_TYPE = "110101"
@@ -15,11 +15,7 @@ GASWIZARD_CARBON_SERIAL_TYPE = "110010"
 FLAME_GUARD_SERIAL_TYPE = "100000"
 DEVICE_PAYLOAD_IDENTIFIER = "device_payload"
 FRIDGE_SENSE_SERIAL_PREFIX = "EXCFLS22A1"
-HomeSenseSerialPrefixDict = {"110001":"EXCGASFMET", "110010":"EXCGASFCO","110011":"EXCGASFHYS","110001":"EXCGASFMET", "110101":"EXCGASFSMK", "100000": "EXCFLS22A", "110000": "EXCFRSADA22A", "000000": "EXCMCU22A", "000001": "EXCMCU22A", "000001": "EXCMCUIKM22A"}
-GASWIZARD_SMOKE_SERIAL_TYPE = "110101"
-GASWIZARD_METHANE_SERIAL_TYPE = "110001"
-GASWIZARD_HYDROGEN_SERIAL_TYPE = "110011"
-GASWIZARD_CARBON_SERIAL_TYPE = "110010"
+HomeSenseSerialPrefixDict = {"110001": "EXCGASFMET", "110010": "EXCGASFCO","110011":"EXCGASFHYS", "110101": "EXCGASFSMK", "100000": "EXCFLS22A", "110000": "EXCFRSADA22A", "000000": "EXCMCU22A", "000001": "EXCMCUIKM22A"}
 gas_type_serial_prefixes = [GASWIZARD_SMOKE_SERIAL_TYPE, GASWIZARD_METHANE_SERIAL_TYPE, GASWIZARD_HYDROGEN_SERIAL_TYPE, GASWIZARD_CARBON_SERIAL_TYPE]
 
 LONG_TERM_DEVICE_FILE = 'device_file.txt'
@@ -45,11 +41,11 @@ MAIN_UNIT_TYPE = "001010"  # 10 IN BINARY 6 BIT
 FLAME_ADC_MINIMUM = 750
 FLAME_THRESHOLD = 3  # Number of reads considered to be significant during read interval
 FLAMMABLE_GAS_THRESHOLD = 3  # Number of reads considered to be significant during read interval
-DASHBOARD_NAMESERVER = "https://www.itoven-ai.co"
+DASHBOARD_NAMESERVER = "https://homi.herokuapp.com/"
 DASHBOARD_PATH = "/homi/dashboard"
 DASHBOARD_LOCATION = DASHBOARD_NAMESERVER + DASHBOARD_PATH
 TEMPERATURE_STABILITY_DEAD_ZONE = 7  # Amount of negligible temperature fluctuations in a single interval
 HUMIDITY_STABILITY_DEAD_ZONE = 7  # Amount of negligible temperature fluctuations in a single interval
-device_id = randomID() # 8 bit ID, UNIQUE PER PROGRAM
 device_name = "Exceed IO Homi/HomeSense Homi Hub + Integrated Kitchen Monitoring"
-device_category = "000001" # STATIC FOR ALL VERSIONS OF THIS DEVICE
+device_category = "000000" # STATIC FOR ALL VERSIONS OF THIS DEVICE
+READING_RF = True  # Toggle this when you start various sensor monitoring procedures

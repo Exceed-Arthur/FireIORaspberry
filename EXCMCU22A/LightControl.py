@@ -1,5 +1,5 @@
 import machine
-from FireIORaspb import LED_PINS
+from PIN_DEFS import LED_PINS
 import time
 
 
