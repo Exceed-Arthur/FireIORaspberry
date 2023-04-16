@@ -4,11 +4,14 @@ from WebFunctions import *
 from template_content import *
 from microdot import Microdot, Response, redirect
 from microdot_session import set_session_secret_key
+
 RELATIVE_BACK_END_SUCCESS_PATH = '/config/network/success2'
 RELATIVE_FRONT_END_SUCCESS_PATH = '/config/network/success1'
-app = Microdot()
+app = main.app
 set_session_secret_key('top-secret')
 Response.default_content_type = 'text/html'
+
+
 
 
 @app.get('/login')

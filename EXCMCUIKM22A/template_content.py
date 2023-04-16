@@ -1,8 +1,8 @@
-from FireIORaspb import *
-
+import CONSTANT_DEFS
+import config
 
 def getDashboardLocation():
-    return f"{DASHBOARD_LOCATION_PATH}?username={config.username}"
+    return f"{CONSTANT_DEFS.DASHBOARD_LOCATION_PATH}?username={config.username}"
 
 
 stylesheet = '<link rel="stylesheet" href="https://itoven-ai.co/homi/css/main.css">'
@@ -72,7 +72,7 @@ SUCCESSFUL_WIFI_SETUP = f'''
          <p>Note: If your login credentials are correct, this button will take you to your devices. If not, it will take you back to the login screen.</p>
        </div>
        <div id="buttonDiv" style="max-width: 50%; min-height: 15rem;left: 25%; position: relative; border-radius: 1rem; padding: 1rem;">
-         <button class="button-15" style="top: 1rem;;min-width: 50%; left: 25%; position: relative;box-shadow: rgba(0, 0, 0, 0.4) 0px 13px 30px;; border-radius: 1rem; padding: 1rem;"> My Dashboard <a href="{DASHBOARD_LOCATION}"></a>
+         <button class="button-15" style="top: 1rem;;min-width: 50%; left: 25%; position: relative;box-shadow: rgba(0, 0, 0, 0.4) 0px 13px 30px;; border-radius: 1rem; padding: 1rem;"> My Dashboard <a href="{getDashboardLocation()}"></a>
          </button>
        </div>
      </div>
@@ -112,7 +112,7 @@ SUCCESSFUL_LOGIN = f'''
          <p>Note: If your login credentials are correct, this button will take you to your devices. If not, it will take you back to the login screen.</p>
        </div>
        <div id="buttonDiv" style="max-width: 50%; min-height: 15rem;left: 25%; position: relative; border-radius: 1rem; padding: 1rem;">
-         <button class="button-15" style="top: 1rem;;min-width: 50%; left: 25%; position: relative;box-shadow: rgba(0, 0, 0, 0.4) 0px 13px 30px;; border-radius: 1rem; padding: 1rem;"> My Dashboard <a href="{DASHBOARD_LOCATION}"></a>
+         <button class="button-15" style="top: 1rem;;min-width: 50%; left: 25%; position: relative;box-shadow: rgba(0, 0, 0, 0.4) 0px 13px 30px;; border-radius: 1rem; padding: 1rem;"> My Dashboard <a href="{getDashboardLocation()}"></a>
          </button>
        </div>
      </div>

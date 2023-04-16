@@ -9,16 +9,20 @@ import access_point_exc
 import LightControl
 import device_identity
 import time
+from microdot import Microdot
+
 from VOLATILE_DEVICE_FILE import *
 DEVICE_USER = EXC_PROFILE_USER()
 
+
+app = Microdot()
 device_id = device_identity.randomID()  # 8 bit ID, UNIQUE PER PROGRAM
 
 
 def localServer():
     import access_point_exc
     access_point_exc.connectAccessPoint()
-    localHostListener.app.run()
+    app.run()
 
 
 def writeCodesToFile(filename=LONG_TERM_DEVICE_FILE, codes=None):  # Data segment in part 2,  prefix in part 1 (index 0)

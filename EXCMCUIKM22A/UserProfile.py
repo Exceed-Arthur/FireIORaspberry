@@ -11,4 +11,4 @@ class EXC_PROFILE_USER:
         self.id_ = id_
         self.isActive = False
 
-
+DEVICE_USER = EXC_PROFILE_USER()

@@ -56,7 +56,7 @@ class BasicSensor(HomeSenseUnit):
 
 
 class I2CSensor(HomeSenseUnit):
-    def __int__(self, SDA_PIN=I2C_PIN.SDA1, SCL_PIN=I2C_PIN.SCL1):
+    def __int__(self, SDA_PIN=SDA1, SCL_PIN=SCL1):
         self.SDA_PIN = SDA_PIN
         self.SCL_PIN = SCL_PIN
 
@@ -79,42 +79,10 @@ class AnalogSensor(BasicSensor):
         return adjusted_signal  # 0-255
 
 
-class FlameSensor(AnalogSensor):
-    def __init__(self, SIGNAL_PIN=GPIO_PIN.FLAME_SENSOR):
-        # call parent constructor to set MAX_VALUE and READ_COUNT
-        super().__init__(SIGNAL_THRESHOLD=)  # DEFINE PROPER SIGNAL PIN AND INHERIT ADDRESSING SCHEME
-        self.SIGNAL_PIN = SIGNAL_PIN
-        self.MINIMUM_HIGH_SIGNAL = FLAME_ADC_MINIMUM
-        self.HIGH_SIGNALS = 0  # Increment every time signal is high
-
-    def flameDetected(self):
-        return self.HIGH_SIGNALS >= self.SIGNAL_THRESHOLD  # Adjustable sensitivity to flame-like light
-
-    def getJSONComponent(self):
-        specific_dict = self.JSON  # BASIC ADDRESSING INFO
-        specific_dict.update(dict(flame=self.flameDetected(), intensity=self.getIntensity()))
-        return specific_dict
-
-    @staticmethod
-    def RFJSONComponent(RFCode):  # Radio frequency of
-        device_type = RFCode[0:6]
-        device_id = RFCode[6:14]
-        device_data = RFCode[14:24]
-        device_intensity = device_data[0:8]
-        flame = device_data[-1]  # Negative bit is state[0], state[1]
-        name = f"{HomeSenseModelNameDict[device_type]} {int(device_id, 2)}"
-        return dict(name=name, flame=int(flame), intensity=device_intensity)
-
-    def advancedSensorRead(self, RequestData: dict, SIGNAL_ACCUMULATOR: int):
-        if self.basicSensorRead():
-            RequestData.update({"priority": HIGH, "device": self.DEVICE_COMPOSITE_KEY(),
-                                "flame": LIT, "intensity": self.get8BitIntensity()})
-            SIGNAL_ACCUMULATOR += 1
-        return RequestData, SIGNAL_ACCUMULATOR
 
 
 class FlammableGasSensor(AnalogSensor):
-    def __init__(self, SIGNAL_PIN=GPIO_PIN.FLAMMABLE_GAS_SENSOR):
+    def __init__(self, SIGNAL_PIN=FLAMMABLE_GAS_SENSOR):
         # call parent constructor to set MAX_VALUE and READ_COUNT
         super().__init__(SIGNAL_THRESHOLD=FLAMMABLE_GAS_THRESHOLD)  # Basic Sensor
         self.SIGNAL_PIN = SIGNAL_PIN
@@ -160,7 +128,7 @@ class DigitalSensor(BasicSensor):
 
 
 class ProximitySensor(DigitalSensor):  # High if someone present during read
-    def __init__(self, SIGNAL_PIN=GPIO_PIN.PROXIMITY_SENSOR, HIGH_SIGNALS=0, SIGNAL_THRESHOLD=PROXIMITY_THRESHOLD):
+    def __init__(self, SIGNAL_PIN=PROXIMITY_SENSOR, HIGH_SIGNALS=0, SIGNAL_THRESHOLD=PROXIMITY_THRESHOLD):
         # call parent constructor to set MAX_VALUE and READ_COUNT
         super().__init__(SIGNAL_PIN)
         self.SIGNAL_THRESHOLD = SIGNAL_THRESHOLD  # Number of reads considered to be significant during read interval
@@ -193,7 +161,7 @@ class ProximitySensor(DigitalSensor):  # High if someone present during read
 class AHT20(I2CSensor):
     def __init__(self):
         super().__init__()  # Get Unique Addressing Scheme for HomeSense
-        i2c = I2C(id=AHT20_ID, scl=I2C_PIN.SCL1, sda=I2C_PIN.SDA1)
+        i2c = I2C(id=1, scl=Pin(SCL1), sda=Pin(SDA1))
         self.sensor = ahtx0.AHT20(i2c)
         self.warmingEvents = 0  # Number of independent temperature increases within interval
         self.temperatureFluctuation = 0  # Magnitude of temperature fluctuations weighed against each other (+/-)

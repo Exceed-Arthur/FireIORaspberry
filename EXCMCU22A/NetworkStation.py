@@ -1,7 +1,9 @@
 import config
 import network
 from LightControl import *
+from PIN_DEFS import *
 import access_point_exc
+import ValidateCredentials
 
 STATION_INTERFACE = network.WLAN(network.STA_IF)
 
@@ -18,7 +20,7 @@ def connect_WIFI():
             while not STATION_INTERFACE.isconnected() and timeoutLimit:
                 time.sleep(1)
                 timeoutLimit -= 1
-                lightShow([LED_PINS.DISCONNECT, LED_PINS.CONNECT], 1)
+                lightShow([DISCONNECT, CONNECT], 1)
             if not timeoutLimit:
                 print("Failed to connect within timeout period")
                 return False
@@ -33,3 +35,29 @@ def connect_WIFI():
         access_point_exc.connectAccessPoint()
         localServer()  # Run settings-based web app on local host to set up wifi
         return False
+
+
+def disconnect_WIFI():
+    global STATION_INTERFACE
+    if STATION_INTERFACE.isconnected():
+        print("Disconnecting from outgoing WIFI...")
+        STATION_INTERFACE.active(False)
+        timeoutLimit = 30
+        while STATION_INTERFACE.isconnected() and timeoutLimit:
+            time.sleep(1)
+            timeoutLimit -= 1
+            lightShow([DISCONNECT, RESET], 1)
+        if not timeoutLimit:
+            print("Failed to disconnect within timeout period")
+            return False
+        else:
+            print("Disconnected to wifi.")
+            return True
+    access_point_exc.ap_if.active(True)  # Turn on local access point
+    return True
+
+
+# MUST MODIFY CREDENTIALS FIRST IF ON FIRST RUN
+def isConnected():
+    global STATION_INTERFACE
+    return STATION_INTERFACE.isconnected()

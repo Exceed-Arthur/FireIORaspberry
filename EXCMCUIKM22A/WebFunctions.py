@@ -1,16 +1,13 @@
-import time
-import bricker
-from FireIORaspb import EXC_SESSION_MODIFICATION_URL, EXC_SESSION_INDEX_URL, \
-    DEVICE_PAYLOAD_IDENTIFIER, DEVICE_REQUEST_LISTENER_URL, USER_AUTHENTICATION_URL, DEVICE_USER
+import CONSTANT_DEFS
 import urequests
-
+import UserProfile
 
 def withAlert(content, alertText):
     return f'<script>alert("{alertText}");</script>{content}'
 
 
 def withRedirect(content, redirect):
-    return f'<script>setTimeout(function(){ window.location = redirect; },5000);</script>{content}'
+    return r"<script>setTimeout(function(){ window.location = redirect; },5000);</script>{content}"
 
 
 def getJSON(url):
@@ -61,19 +58,19 @@ def setToJSON(JSON_SET):
     return JSON
 
 
-def UpdateDashboard(Data, USERNAME=DEVICE_USER.username):
+def UpdateDashboard(Data, USERNAME=UserProfile.DEVICE_USER.username):
     JSON = setToJSON(Data)
-    return urequests.post(url=DEVICE_REQUEST_LISTENER_URL, data={USERNAME:JSON})
+    return urequests.post(url=CONSTANT_DEFS.DEVICE_REQUEST_LISTENER_URL, data={USERNAME:JSON})
 
 
-def sendPriorityAlert(url=DEVICE_REQUEST_LISTENER_URL, USERNAME=DEVICE_USER.username, json):
+def sendPriorityAlert(url=CONSTANT_DEFS.DEVICE_REQUEST_LISTENER_URL, USERNAME=UserProfile.DEVICE_USER.username, json=None):
     JSON = setToJSON(json)
     JSON.update(timestamp=time.time())
     return urequests.post(url=url, data={USERNAME: JSON})
 
 
-def userAuthenticated(url=USER_AUTHENTICATION_URL, USERNAME=DEVICE_USER.username, PASSWORD=DEVICE_USER.password):
-    r = urequests.get(url=url, data=dict(username=USERNAME, password=bricker.hashBrick(PASSWORD)))
+def userAuthenticated(url=CONSTANT_DEFS.USER_AUTHENTICATION_URL, USERNAME=UserProfile.DEVICE_USER.username, PASSWORD=UserProfile.DEVICE_USER.password):
+    r = urequests.get(url=url, data=dict(username=USERNAME, password=PASSWORD))
     if "200" in str(r.status_code):
         if "true" in r.text.lower():
             print(f"USER AUTHENTICATED {DEVICE_USER.username} {DEVICE_USER.password}")

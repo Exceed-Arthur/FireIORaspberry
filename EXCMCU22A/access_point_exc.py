@@ -5,6 +5,8 @@ exc_ssid = 'ExceedIO HomeSense WIFI'
 exc_wpa = 'safe'
 
 
+
+
 def connectAccessPoint(ssid1=exc_ssid, password1=exc_wpa):  # VOID
 	global ap_if
 	ap_if.config(ssid=ssid1, password=password1)

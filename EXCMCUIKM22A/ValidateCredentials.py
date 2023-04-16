@@ -1,10 +1,10 @@
-import requests
-
-import NetworkStation, access_point_exc
+import urequests as requests
+import NetworkStation
+import access_point_exc
 import WebFunctions
 import config
 import fileIO
-from FireIORaspb import localServer
+
 
 
 def secondaryAuthentication():

@@ -3,7 +3,7 @@ import access_point_exc
 import WebFunctions
 import config
 import fileIO
-from EXCMCU22A import localServer
+
 
 
 def secondaryAuthentication():

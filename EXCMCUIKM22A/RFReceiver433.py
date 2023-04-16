@@ -6,12 +6,11 @@ The code was based on https://github.com/AdrianCX/pico433mhz library and contain
 import time
 from machine import Pin
 from micropython import schedule
-from FireIORaspb import SENSOR_READ_LIMIT, READING_RF
-from CONSTANT_DEFS import RF_READ_LIMIT
+from CONSTANT_DEFS import SENSOR_READ_LIMIT, RF_READ_LIMIT
 from collections import namedtuple
-
 import miscFuncs
 
+READING_RF = True  # Toggle this when you start various sensor monitoring procedures
 MAX_CHANGES: int = 67
 DEFAULT_TRANSMITTER_PIN: int = 27
 DEFAULT_RECEIVER_PIN: int = 22
