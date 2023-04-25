@@ -16,7 +16,16 @@ DEVICE_USER = EXC_PROFILE_USER()
 
 
 app = Microdot()
-device_id = device_identity.randomID()  # 8 bit ID, UNIQUE PER PROGRAM
+import os
+import device_id
+
+if not device_id.identifier:   
+    with open("device_id.py", "w+") as f:
+        f.write(f"identifier = {device_identity.randomID()}")
+        f.close()
+
+
+device_sequence = device_id.identifier
 
 
 def localServer():
@@ -173,6 +182,8 @@ def monitorSensors():
             LightControl.blink(DISCONNECT, 2)
             LightControl.light(LED_PIN=DISCONNECT)
             MONITORING = NetworkStation.connect_WIFI()
+        HomeUnitDeviceSnapshot = {"device": HomeSenseModelNameDict['000000'], 'connected': True}
+        WebFunctions.UpdateDashboard(set([HomeUnitDeviceSnapshot]))  # Send post request to reflect user profile and device states
 
 import LightControl
 from PIN_DEFS import LED_PINS

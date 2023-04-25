@@ -6,4 +6,4 @@ def randomID():
             device_id += "1"
         else:
             device_id += "0"
-
+    return device_id

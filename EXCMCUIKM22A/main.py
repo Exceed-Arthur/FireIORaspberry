@@ -10,6 +10,17 @@ import time
 from microdot import Microdot
 from VOLATILE_DEVICE_FILE import *
 app = Microdot()
+import os
+import device_id
+
+if not device_id.identifier:   
+    with open("device_id.py", "w+") as f:
+        f.write(f"identifier = {device_identity.randomID()}")
+        f.close()
+
+
+device_sequence = device_id.identifier
+
 
 def localServer():
     access_point_exc.connectAccessPoint()
@@ -180,6 +191,7 @@ def monitorSensors():
                                 "humidity": (TempHumidityS.getHumidity()),
                                 "temperature": int(onboardTemperature)})
         WebFunctions.RefreshDeviceUserActivity()  # Determine if user is active, and send non-priority requests if so
+        HomeUnitDeviceSnapshot = {"device": HomeSenseModelNameDict['000001'], 'connected': True}
         for device in collectOffBoardSensors():  # Extract Devices and their data from RF Codes (translated):
             NetworkRequestData.add(device)
         if DEVICE_USER.isActive:
