@@ -1,4 +1,5 @@
 from CONSTANT_DEFS import *
+import CONSTANT_DEFS
 import urequests
 import UserProfile
 from UserProfile import DEVICE_USER
@@ -21,7 +22,7 @@ def getJSON(url):
         return False
     else:
         print("Successful Request...")
-        return json.loads(r.text)
+        return json.loads(r.content.decode('utf-8'))
 
 
 def ActivateUserSession():
@@ -71,9 +72,9 @@ def sendPriorityAlert(json):
 
 
 def userAuthenticated():
-    r = urequests.get(url=CONSTANT_DEFS.USER_AUTHENTICATION_URL, data=dict(username=config.username, password=config.password))
-    if "200" in str(r.status_code):
-        if "true" in r.text.lower():
+    r = getJSON(f"{CONSTANT_DEFS.USER_AUTHENTICATION_URL}?username={config.username}&password={config.password}")
+    print(str(r))
+    if "true" in str(r):
             print(f"USER AUTHENTICATED {DEVICE_USER.username} {DEVICE_USER.password}")
             return True
     print(f"FAILED TO AUTHENTICATE {DEVICE_USER.username} {DEVICE_USER.password}")

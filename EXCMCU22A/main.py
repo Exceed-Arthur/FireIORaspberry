@@ -8,6 +8,7 @@ from CONSTANT_DEFS import *
 import NetworkStation
 import access_point_exc
 import LightControl
+from PIN_DEFS import *
 import os
 import time
 from microdot import Microdot
@@ -167,6 +168,7 @@ def monitorSensors():
     WebFunctions.RefreshDeviceUserActivity()  # Determine if user is active, and send non-priority requests if so
     while MONITORING:
         for i in range(SENSOR_READ_LIMIT):
+            LightControl.blink(TALK, 1)
             RF_CODES = rfReceiver.normalizeRFCodes(rfReceiver.scanRFCodes())  # Returns set of normalized binary codes
             writeDeviceFileFromRF(RF_CODES)  # Cache and update device file containing user's home devices
             PriorityNetworkRequestData = set()  # Save Network Capacity By Limiting Immediate Requests
@@ -179,7 +181,6 @@ def monitorSensors():
             NetworkRequestData.add(device)
         if DEVICE_USER.isActive:
             NetworkRequestData.add(HomeUnitDeviceSnapshot)
-    
             WebFunctions.UpdateDashboard(NetworkRequestData)  # Send post request to reflect user profile and device states
         if not NetworkStation.STATION_INTERFACE.isconnected():
             LightControl.blink(DISCONNECT, 2)
@@ -205,9 +206,13 @@ def servicePicker():
     else: # connected and has credentials
         print("SERVICE PICKER DETECTED EXISTING CONNECTION")
         print(config.username, config.password)
-        print("SERVICE PICKER DETECTED A CONNECTION AND CREDENTIALS")
-        monitorSensors()
-        print("EXITED MONITORING FROM SERVICE PICKER")
+        if WebFunctions.userAuthenticated():
+            print("SERVICE PICKER DETECTED A CONNECTION AND CREDENTIALS")
+            monitorSensors()
+            print("EXITED MONITORING FROM SERVICE PICKER")
+        else:
+            LightControl.LightShow([RESET], 5)
+            localServer()
             
             
 

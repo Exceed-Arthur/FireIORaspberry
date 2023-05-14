@@ -21,7 +21,7 @@ def secondaryAuthentication():
             localServer()
         else:
             print("Positive network connection. Attempting to validate User profile...")
-            if not WebFunctions.userAuthenticated(config.username, config.password):
+            if not WebFunctions.userAuthenticated():
                 print("INVALID CREDENTIALS. TRY AGAIN. REDIRECTING.")
                 fileIO.replaceFileFromString('config.py', fileIO.replaceVariableInPYFileString(fileName='config.py',
                                                                                                var='username', val='None'))
