@@ -120,44 +120,94 @@ SUCCESSFUL_LOGIN = f'''
 
 '''
 
+LOGGED_OUT = '''
+  <style>
+    /* Default styles */
+    div {
+      padding-top: 5rem;
+    }
 
-LOGGED_OUT = f'''
-  
-  <div style="padding-top: 5rem">
-    <p style="text-align: center;">You are not logged in. New users must create an account at <a href="https://homi.itoven-ai.co" style="color: gold; font-weight: bold;">Homi</a> with a valid internet connection. Your username must be a valid email address. </p>
-    <div style="display: flex; justify-content: center;position: ; min-width: 50%; padding-top: 2rem;">
-      <form method="POST">
-        <p> Username: <input style="background-color: beige;" type="text" name="username" autofocus />
-        </p>
-        <p style="padding-bottom: 2rem;"> Password: <input type="text" style="background-color: beige;" name="password" autofocus />
-        </p>
-        <div>
-          <div style="display: inline-flex;">
-            <input type="submit" class="button-15" value="Login" />
-            <a href="https://homi.itoven-ai.co/forgot">
-              <button class="button-15" value="Create an Account"> Forgot </button>
-            </a>
-            <a href="https://homi.itoven-ai.co/register">
-              <button class="button-15" value="Sign Up"> Sign Up </button>
-            </a>
-          </div>
-        </div>
-      </form>
-    </div>
+    p {
+      text-align: center;
+    }
+
+    a {
+      color: gold;
+      font-weight: bold;
+    }
+
+    form {
+      min-width: 50%;
+      display: flex;
+      justify-content: center;
+      padding-top: 2rem;
+    }
+
+    input[type="text"] {
+      background-color: beige;
+    }
+
+    .button-15 {
+      margin: 0 0.5rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Media queries */
+    @media screen and (max-width: 600px) {
+      div {
+        padding-top: 2rem;
+      }
+
+      form {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .button-15 {
+        margin: 1rem 0;
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+  <div>
+    <p>You are not logged in. New users must create an account at <a href="https://homi.itoven-ai.co">Homi</a> with a valid internet connection. Your username must be a valid email address.</p>
+    <form method="POST">
+      <p> Username: <input type="text" name="username" autofocus />
+      </p>
+      <p>Password: <input type="text" name="password" autofocus />
+      </p>
+      <div>
+        <input type="submit" class="button-15" value="Login" />
+        <a href="https://homi.itoven-ai.co/forgot">
+          <button class="button-15" value="Forgot">Forgot</button>
+        </a>
+        <a href="https://homi.itoven-ai.co/register">
+          <button class="button-15" value="Sign Up">Sign Up</button>
+        </a>
+      </div>
+    </form>
   </div>
-  
   '''
 
-NETWORK_CONFIG_PG = f''' 
 
+NETWORK_CONFIG_PG = """
   <div>
     <p style="padding-bottom: 2rem; padding-top: 2rem; text-align: center;">Let's get connected to your home network.</p>
     <form method="POST">
-      <p> Home WiFi Name (SSID): <input style="background-color: beige;" type="text" name="ssid" autofocus />
-      </p>
+      <p> Home WiFi Name (SSID): <input style="background-color: beige;" type="text" name="ssid" autofocus /></p>
       <p style="padding-bottom: 2rem;"> Home WiFi Passkey (WPA/WPA2): <input style="background-color: beige;" type="text" name="wpa" autofocus />
       </p>
       <input style="" type="submit" class="button-15" value="Submit" />
     </form>
   </div>
-'''
+"""
+
