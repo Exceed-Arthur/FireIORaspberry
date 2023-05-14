@@ -1,1 +1,1 @@
-identifier = ""
+identifier = None

@@ -2,38 +2,40 @@ import network
 ap_if = network.WLAN(network.AP_IF)
 credentialFile = "config.py"
 exc_ssid = 'ExceedIO HomeSense WIFI'
-exc_wpa = 'safe'
+exc_wpa = 'homesense'
 
 
 
 
-def connectAccessPoint(ssid1=exc_ssid, password1=exc_wpa):  # VOID
-	global ap_if
-	ap_if.config(ssid=ssid1, password=password1)
-	ap_if.active(True)
-	if ap_if.active():
-		print(f"ACCESS POINT {ssid1} ACTIVATED [connect with pw: {password1}]")
-		return True
-	else:
-		print(f"ACCESS POINT {ssid1} FAILED TO ACTIVATE")
-		return False
+def connectAccessPoint():  # VOID
+    global ap_if
+    ap_if.active(False)
+    ap_if.config(ssid=exc_ssid, password=exc_wpa)
+    ap_if.active(True)
+    print(ap_if.ifconfig())
+    if ap_if.active():
+        print(f"ACCESS POINT {exc_ssid} ACTIVATED [connect with pw: {exc_wpa}]")
+        return True
+    else:
+        print(f"ACCESS POINT {exc_ssid} FAILED TO ACTIVATE")
+        return False
 
 
 def disconnectAccessPoint(ssid=exc_ssid):
-	global ap_if
-	ap_if.active(False)
-	if ap_if.active():
-		print(f"ACCESS POINT {ssid} DISCONNECTED")
-		return True
-	else:
-		return False
+    global ap_if
+    ap_if.active(False)
+    if not ap_if.active():
+        print(f"ACCESS POINT {ssid} DISCONNECTED")
+        return True
+    else:
+        return False
 
 
 def modifyCredentials(SSID_, PASS_):
-	import fileIO
-	for credential in [SSID_, PASS_]:
-		fileIO.replaceFileFromString(credentialFile, fileIO.replaceVariableInPYFileString(credential))
-	print(f"Modified {credentialFile} with new SSID and PASS {[SSID_, PASS_]}")
+    import fileIO
+    fileIO.replaceFileFromString(credentialFile, fileIO.replaceVariableInPYFileString(credentialFile, 'WIFI_SSID', SSID_))
+    fileIO.replaceFileFromString(credentialFile, fileIO.replaceVariableInPYFileString(credentialFile, 'WIFI_PASSWORD', PASS_))
+    print(f"Modified {credentialFile} with new SSID and PASS {[SSID_, PASS_]}")
 
 
 """

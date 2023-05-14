@@ -1,7 +1,9 @@
-import bricker
-import CONSTANT_DEFS
+from CONSTANT_DEFS import *
 import urequests
 import UserProfile
+from UserProfile import DEVICE_USER
+import config
+import json
 
 def withAlert(content, alertText):
     return f'<script>alert("{alertText}");</script>{content}'
@@ -16,16 +18,14 @@ def getJSON(url):
     if r.status_code >= 300 or r.status_code < 200:
         print("There was an error with your request to send a message. \n" +
               "Response Status: " + str(r.status_code))
-        r.close()
         return False
     else:
         print("Successful Request...")
-        r.close()
-        return r.text
+        return json.loads(r.text)
 
 
 def ActivateUserSession():
-    SessionModificationResponse = getJSON(f"{EXC_SESSION_MODIFICATION_URL}?username={DEVICE_USER.username}")
+    SessionModificationResponse = getJSON(f"{EXC_SESSION_MODIFICATION_URL}?username={config.username}")
     if SessionModificationResponse['complete'] == 1:
         print("Modification Request Failed. Device User Activity failed to update.")
         return False
@@ -35,10 +35,10 @@ def ActivateUserSession():
 
 
 def RefreshDeviceUserActivity():
-    activeSessionIndex = getJSON(f"{EXC_SESSION_INDEX_URL}?username={DEVICE_USER.username}")
+    activeSessionIndex = getJSON(f"{EXC_SESSION_INDEX_URL}?username={config.username}")
     if activeSessionIndex['active']:  # 0 if inactive and 1 if active
-        DEVICE_USER.isActive = True
-        print(f"DEVICE USER {DEVICE_USER} ACTIVE")
+        UserProfile.DEVICE_USER.isActive = True
+        print(f"DEVICE USER {config.username} ACTIVE")
     else:
         DEVICE_USER.isActive = False
         print(f"DEVICE USER {DEVICE_USER} IN-ACTIVE")
@@ -64,14 +64,14 @@ def UpdateDashboard(Data, USERNAME=UserProfile.DEVICE_USER.username):
     return urequests.post(url=CONSTANT_DEFS.DEVICE_REQUEST_LISTENER_URL, data={USERNAME:JSON})
 
 
-def sendPriorityAlert(url=CONSTANT_DEFS.DEVICE_REQUEST_LISTENER_URL, USERNAME=UserProfile.DEVICE_USER.username, json=None):
+def sendPriorityAlert(json):
     JSON = setToJSON(json)
     JSON.update(timestamp=time.time())
-    return urequests.post(url=url, data={USERNAME: JSON})
+    return urequests.post(url=CONSTANT_DEFS.DEVICE_REQUEST_LISTENER_URL, data={config.username: JSON})
 
 
-def userAuthenticated(url=CONSTANT_DEFS.USER_AUTHENTICATION_URL, USERNAME=UserProfile.DEVICE_USER.username, PASSWORD=UserProfile.DEVICE_USER.password):
-    r = urequests.get(url=url, data=dict(username=USERNAME, password=bricker.hashBrick(PASSWORD)))
+def userAuthenticated():
+    r = urequests.get(url=CONSTANT_DEFS.USER_AUTHENTICATION_URL, data=dict(username=config.username, password=config.password))
     if "200" in str(r.status_code):
         if "true" in r.text.lower():
             print(f"USER AUTHENTICATED {DEVICE_USER.username} {DEVICE_USER.password}")

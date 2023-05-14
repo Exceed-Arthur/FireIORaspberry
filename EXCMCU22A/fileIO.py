@@ -6,8 +6,12 @@ def replaceVariableInPYFileString(fileName, var=None, val=None): # variable and 
     with open(fileName, 'r') as f:
         for line in f.readlines():
             if str(var) in line: # Replace var in this line with val
-                fileBuffer += f"{var} = {val}\n"
-                print(f"Line of {fileName} modified to: {fileBuffer}")
+                if val == None:
+                    fileBuffer += f"{var} = {val}\n"
+                    print(f"Line of {fileName} modified to: {fileBuffer}")
+                else:
+                    fileBuffer += f"{var} = '{val}'\n"
+                    print(f"Line of {fileName} modified to: '{fileBuffer}'")
             else:
                 fileBuffer += line  # Add back since nothing to replace
     return fileBuffer
@@ -15,8 +19,8 @@ def replaceVariableInPYFileString(fileName, var=None, val=None): # variable and 
 
 def replaceFileFromString(filename, fileString):
     with open(filename, 'w+') as f:
-        filename.write(fileString)
-    if filename in os.listdir(os.path.curdir):
+        f.write(fileString)
+    if filename in os.listdir(os.getcwd()):
         print(f"Wrote file string of length {len(fileString)} to {filename}")
 
 

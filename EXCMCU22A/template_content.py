@@ -1,8 +1,9 @@
 import config
+from config import username
 from CONSTANT_DEFS import *
 
 def getDashboardLocation():
-    return f"{DASHBOARD_LOCATION_PATH}?username={config.username}"
+    return f"{DASHBOARD_LOCATION_PATH}?username={username}"
 
 
 stylesheet = '<link rel="stylesheet" href="https://itoven-ai.co/homi/css/main.css">'
